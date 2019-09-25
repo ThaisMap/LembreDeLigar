@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="LigarMotorista.RelatorioLog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:LigarMotorista"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
+             Background="{DynamicResource MaterialDesignPaper}"
+             FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+             TextElement.FontSize="14"  TextElement.FontWeight="Regular"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             mc:Ignorable="d" Name="Relatorio"
+             d:DesignHeight="450" Width="1200">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Left">
+            <TextBox Name="nomePesquisa" 
+                     materialdesign:HintAssist.Hint="Nome"
+                     materialdesign:HintAssist.IsFloating="True"
+                     Width="200" Margin="10, 5" />            
+            <TextBox Name="nomeMoto" 
+                     materialdesign:HintAssist.Hint="Motorista"
+                     materialdesign:HintAssist.IsFloating="True"
+                     Width="200" Margin="10, 5" />
+            <TextBox Name="textoOcorrencia" 
+                     materialdesign:HintAssist.Hint="Ocorrência"
+                     materialdesign:HintAssist.IsFloating="True"
+                     Width="200" Margin="10, 5" />
+            <DatePicker x:Name="dataInicio"
+                        Width="150" Margin="10, 5"
+                        materialdesign:HintAssist.Hint="Data Inicial"
+                        materialdesign:HintAssist.IsFloating="True"
+                        VerticalAlignment="Bottom"
+                        Language="pt-br" />            
+            <DatePicker x:Name="dataFim"
+                        Width="150" Margin="10, 5"
+                        materialdesign:HintAssist.Hint="Data Final"
+                        materialdesign:HintAssist.IsFloating="True"
+                        VerticalAlignment="Bottom"
+                        Language="pt-br" />
+            <Button Name="Pesquisar" Content="_Pesquisar" 
+                    IsDefault="True"
+                    Margin="10, 5" Click="Pesquisar_Click" />
+        </StackPanel>
+        <Button Name="BtnExportar" Content="Exportar"
+                Click="BtnExportar_Click" 
+                DockPanel.Dock="Bottom"
+                HorizontalAlignment="Right" Margin="30,10" />
+        
+        <DataGrid Name="dgLista" DockPanel.Dock="Top"
+                  Padding="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                  AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Data" Width="Auto" Binding="{Binding Data, StringFormat='dd/MM/yyyy'}" />
+                <DataGridTextColumn Header="Hora" Width="Auto" Binding="{Binding Hora, StringFormat='HH:mm'}" />
+                <DataGridTextColumn Header="Quem Ligou" Width="Auto" Binding="{Binding QuemLigou}" />
+                <DataGridTextColumn Header="Motorista" Width="Auto" Binding="{Binding NomeMotorista}" />
+                <DataGridTextColumn Header="Observação" Width="Auto" Binding="{Binding Obs}" />
+            </DataGrid.Columns>
+        </DataGrid>
+       
+    </DockPanel>
+</UserControl>

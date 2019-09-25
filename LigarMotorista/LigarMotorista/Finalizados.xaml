@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="LigarMotorista.Finalizados"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:LigarMotorista"
+             xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" Name="TelaFinalizados"
+             HorizontalAlignment="Stretch"         
+             VerticalAlignment="Stretch"             
+             Background="{DynamicResource MaterialDesignPaper}"
+             FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+             TextElement.FontSize="16"  TextElement.FontWeight="Regular"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}" d:DesignWidth="500" d:DesignHeight="300">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Bottom"
+                    Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="Exportar"
+                    Margin="5"
+                    Width="100" Height="40"
+                    VerticalAlignment="Top"
+                    Click="Exportar_Click"
+                    Content="Exportar" />
+            <Button x:Name="ApagarTudo"
+                    Margin="5"
+                    Width="150" Height="40"
+                    VerticalAlignment="Top"
+                    Click="ApagarTudo_Click"
+                    Content="Apagar todos" />
+        </StackPanel>
+        <DataGrid Name="dgLista" AutoGenerateColumns="False"
+                  DockPanel.Dock="Top"
+                  materialdesign:DataGridAssist.CellPadding="2 4 2 0"
+                  HorizontalAlignment="Center" VerticalAlignment="Stretch"
+                  VerticalScrollBarVisibility="Auto" Margin="30,0"
+                  BeginningEdit="dgLista_BeginningEdit"
+                  CellEditEnding="Registrar_Alteracao"
+                  PreviewKeyDown="dgLista_PreviewKeyDown"
+                  CanUserAddRows="False">
+            <DataGrid.Columns>
+                
+                <DataGridTemplateColumn Header="Finalizar">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="Finalizar" Style="{StaticResource MaterialDesignFlatButton}" CommandParameter="{Binding Path=Id}">
+                                <materialdesign:PackIcon  Height="17" Width="17" Kind="BlockHelper" />
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Diária">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="NovaDiaria" VerticalAlignment="Center" Style="{StaticResource MaterialDesignFlatButton}" CommandParameter="{Binding Path=Id}">
+                                <materialdesign:PackIcon Height="20" Width="20" Kind="ClockStart"></materialdesign:PackIcon>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Motoristas" IsReadOnly="True" Binding="{Binding NomeMotorista}" />
+                <DataGridTextColumn Header="Último Contato" IsReadOnly="True" Binding="{Binding QuemLigou}" />
+                <DataGridTextColumn Header="Observação" IsReadOnly="False" Binding="{Binding Path=Observacao, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        
+    </DockPanel>
+</UserControl>

@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="LigarMotorista.Devolucao"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:LigarMotorista"
+             mc:Ignorable="d" 
+              Background="{DynamicResource MaterialDesignPaper}"
+             FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+             TextElement.FontSize="16"  TextElement.FontWeight="Regular"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             d:DesignHeight="250">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Bottom"
+                    Orientation="Horizontal" HorizontalAlignment="Center">
+            
+            <Button x:Name="ApagarTudo"
+                    Margin="5"
+                    Width="150" Height="40"
+                    VerticalAlignment="Top"
+                    Click="ApagarTudo_Click"
+                    Content="Apagar todos" />
+        </StackPanel>
+        <DataGrid Name="dgLista" AutoGenerateColumns="False"
+                  materialdesign:DataGridAssist.CellPadding="4 4 2 0"
+                  HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                  VerticalScrollBarVisibility="Auto" Margin="30,0"
+                  PreviewKeyDown="DgLista_PreviewKeyDown"
+                  CellEditEnding="Registrar_Alteracao"
+                  CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Apagar">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="Apagar" Style="{StaticResource MaterialDesignFlatButton}" CommandParameter="{Binding Path=Id}">
+                                <materialdesign:PackIcon Kind="BlockHelper" />
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="NF"         IsReadOnly="False" Binding="{Binding Path=NF, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"  />
+                <DataGridTextColumn Header="NFD"        IsReadOnly="False" Binding="{Binding Path=Nfd, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                <DataGridTextColumn Header="Fornecedor" IsReadOnly="False" Binding="{Binding Path=Fornecedor, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                <DataGridTextColumn Header="Cliente"    IsReadOnly="False" Binding="{Binding Path=Cliente, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                <DataGridTextColumn Header="Observação" IsReadOnly="False" Binding="{Binding Path=Obs, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                <DataGridTextColumn Header="Quem Ligou" IsReadOnly="True"  Binding="{Binding Path=QuemLigou, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

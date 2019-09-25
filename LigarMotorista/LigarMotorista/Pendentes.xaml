@@ -1,0 +1,108 @@
+﻿<UserControl x:Class="LigarMotorista.Pendentes"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:LigarMotorista;assembly="
+             xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             Name="Pendente"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
+             MaxWidth="1350" 
+             d:DesignHeight="305"
+             Background="{DynamicResource MaterialDesignPaper}"
+             FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+             TextElement.FontSize="14"  TextElement.FontWeight="Regular"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}" >
+    <UserControl.Resources>
+        <local:PercentConverter x:Key="PercentConverter" />
+    </UserControl.Resources>
+
+    <DockPanel Name="dock">
+        <StackPanel DockPanel.Dock="Bottom"
+                    Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <Button x:Name="Exportar"
+                    Margin="5"
+                    Width="100" Height="40"
+                    VerticalAlignment="Top"
+                    Click="Exportar_Click"
+                    Content="Exportar" />
+            <Button x:Name="FinalizarTudo"
+                    Margin="5"
+                    Width="150" Height="40"
+                    VerticalAlignment="Top"
+                    Click="FinalizarTudo_Click"
+                    Content="Finalizar todos" />
+        </StackPanel>
+        <DataGrid Name="dgLista" AutoGenerateColumns="False"
+                  materialdesign:DataGridAssist.CellPadding="4 4 2 0"
+                  Margin="10 0 10 20"
+                  PreviewKeyDown="DgLista_PreviewKeyDown"
+                  CanUserDeleteRows="True"  CanUserAddRows="False"
+                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                  VerticalScrollBarVisibility="Auto"
+                  BeginningEdit="DgLista_BeginningEdit"
+                  CellEditEnding="Registrar_Alteracao">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Atrasado}" Value="true">
+                            <Setter Property="Background" Value="#FFFBBCC2"></Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Finalizar">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="Finalizar" VerticalAlignment="Center" Style="{StaticResource MaterialDesignFlatButton}" CommandParameter="{Binding Path=Id}">
+                                <materialdesign:PackIcon Height="25" Width="25" Kind="CheckCircleOutline"></materialdesign:PackIcon>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Diaria">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="NovaDiaria" VerticalAlignment="Center" Style="{StaticResource MaterialDesignFlatButton}" CommandParameter="{Binding Path=Id}">
+                                <materialdesign:PackIcon Height="25" Width="25" Kind="ClockStart"></materialdesign:PackIcon>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+              <!--
+                <DataGridTemplateColumn Header="Devolução">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="NovaDevolucao" VerticalAlignment="Center" Style="{StaticResource MaterialDesignFlatButton}" CommandParameter="{Binding Path=Id}">
+                                <materialdesign:PackIcon Height="25" Width="25" Kind="KeyboardReturn"></materialdesign:PackIcon>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                -->
+                <DataGridTemplateColumn Header="Registrar Ligação">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="Registrar_Ligacao" CommandParameter="{Binding Path=Id}">Contatado</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Motoristas" IsReadOnly="True" Binding="{Binding NomeMotorista}" />
+                <DataGridTextColumn Header="Ultima Ligação" IsReadOnly="True" Binding="{Binding Path=UltimaLigacao, StringFormat='HH:mm', Mode=TwoWay, NotifyOnSourceUpdated=True}" />
+                <DataGridTextColumn Header="Intervalo" Binding="{Binding Path=Intervalo, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                <DataGridTextColumn Header="Quem Ligou" IsReadOnly="True" Binding="{Binding Path=QuemLigou, Mode=TwoWay, NotifyOnSourceUpdated=True}" />
+                <DataGridTextColumn Header="Observação" IsReadOnly="False" Binding="{Binding Path=Observacao, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                <DataGridTextColumn Header="Notas fiscais" IsReadOnly="False" Binding="{Binding NF}" />
+                <DataGridTextColumn Header="Fornecedor" IsReadOnly="False" Binding="{Binding Fornecedor}" />
+                <DataGridTextColumn Header="Cliente" IsReadOnly="False" Binding="{Binding Cliente}" />
+                <DataGridTextColumn Header="Ação" IsReadOnly="False" Binding="{Binding Path=Acao, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+      
+    </DockPanel>
+</UserControl>
