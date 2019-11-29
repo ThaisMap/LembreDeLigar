@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ganss.Excel;
+using System;
 
 namespace LigarMotorista
 {
@@ -19,12 +20,15 @@ namespace LigarMotorista
         public string Acao { get; set; }
         public bool Atrasado { get; set; }
         public string Cliente { get; set; }
+        [Column("DATA")]
         public DateTime DataManifesto { get; set; }
         public string Fornecedor { get; set; }
         public string Id { get; set; }
         public int Intervalo { get; set; }
         public string NF { get; set; }
+        [Column("Motorista")]
         public string NomeMotorista { get; set; }
+        [Column("OBSERVAÇÃO")]
         public string Observacao { get; set; }
         public string QuemLigou { get; set; }
         public DateTime UltimaLigacao { get; set; }

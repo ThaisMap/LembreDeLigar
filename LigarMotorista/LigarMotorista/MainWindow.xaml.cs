@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.OleDb;
 using System.IO;
 using System.Windows;
+using Ganss.Excel;
 
 namespace LigarMotorista
 {
@@ -15,6 +16,8 @@ namespace LigarMotorista
         private Dados d = new Dados();
         private string nome = "teste";
         private string nomeArquivo = "motoristas em entrega.xlsx";
+        Diarias diarias = new Diarias();
+
 
         public MainWindow()
         {
@@ -26,7 +29,7 @@ namespace LigarMotorista
 
         private void BtnDiarias_Click(object sender, RoutedEventArgs e)
         {
-            Conteudo.Content = new Diarias();
+            Conteudo.Content = diarias;
         }
 
         private void BtnFinalizados_Click(object sender, RoutedEventArgs e)
@@ -59,8 +62,8 @@ namespace LigarMotorista
             if (openFileDialog.ShowDialog() == true && (openFileDialog.FileName.EndsWith("xls") || openFileDialog.FileName.EndsWith("xlsx")))
                 nomeArquivo = openFileDialog.FileName;
         }
-
-        private void LerPlanilha()
+        
+        private void MapearPlanilha()
         {
             if (MessageBox.Show("Importar dados da planilha?", "Importar", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
@@ -68,35 +71,18 @@ namespace LigarMotorista
 
                 if (File.Exists(nomeArquivo))
                 {
-                    OleDbConnection conn = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + nomeArquivo + ";Extended Properties='Excel 12.0 Xml;HDR=Yes;'");
                     try
                     {
-                        OleDbDataAdapter adapter = new OleDbDataAdapter("Select MOTORISTA, OBSERVAÇÃO, DATA from [Plan1$]", conn);
-                        DataSet ds = new DataSet();
-                        conn.Open();
-                        adapter.Fill(ds);
-
-                        foreach (DataRow linha in ds.Tables[0].Rows)
+                        var motoristas = new ExcelMapper(nomeArquivo).Fetch<Motorista>();
+                        foreach (var item in motoristas)
                         {
-                            if (linha["MOTORISTA"].ToString() != "")
-                            {
-                                d.InserirMotorista(new Motorista()
-                                {
-                                    NomeMotorista = linha["MOTORISTA"].ToString(),
-                                    Observacao = linha["OBSERVAÇÃO"].ToString(),
-                                    DataManifesto = DateTime.Parse(linha["DATA"].ToString())
-                                });
-                            }
-                            else
-                                break;
+                            if(item.NomeMotorista != "")
+                                d.InserirMotorista(item);
                         }
-                        conn.Close();
-                    }
+                   }
                     catch (Exception ex)
-                    {
-                        conn.Close();
-                        if (ex.HResult == -2147217904)
-                            MessageBox.Show("Não foram encontrados na planilha os campos 'MOTORISTA', 'OBSERVAÇÃO' e/ou 'DATA'", "Erro");
+                    {                        
+                            MessageBox.Show(ex.Message);
                     }
                 }
                 else
@@ -106,40 +92,13 @@ namespace LigarMotorista
             }
         }
 
-        private void LiberarObjetos(object obj)
-        {
-            try
-            {
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(obj);
-                obj = null;
-            }
-            catch (Exception ex)
-            {
-                obj = null;
-                MessageBox.Show("Ocorreu um erro durante a liberação do objeto " + ex.ToString());
-            }
-            finally
-            {
-                GC.Collect();
-            }
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void BtnDevolucao_Click(object sender, RoutedEventArgs e)
-        {
-            Conteudo.Content = new Devolucao();
-        }
-
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
             if (txtNome.Text != "")
             {
                 nome = txtNome.Text;                
                 SeuNomeDialog.IsOpen = false;
-                LerPlanilha();
+                MapearPlanilha();
                 Conteudo.Content = new Pendentes(nome);
             }
             else

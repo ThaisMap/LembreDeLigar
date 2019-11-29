@@ -123,17 +123,6 @@ namespace LigarMotorista
             }
         }
 
-        private void NovaDevolucao(object sender, RoutedEventArgs e)
-        {
-            var id = ((Button)sender).CommandParameter.ToString();
-            if (MessageBox.Show("Registrar devolução de NF? ", "Confirmação", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
-            {
-                d.NovaDevolucao(id);
-                CarregaDados();
-                MessageBox.Show("Devolução registrada.\r\nPreencher dados na aba 'Devolução' ", "Confirmação", MessageBoxButton.OK);
-            }
-        }
-
         private void Registrar_Alteracao(object sender, DataGridCellEditEndingEventArgs e)
         {
             if (e.EditAction == DataGridEditAction.Commit) //caso a alteração seja confirmada
@@ -145,7 +134,7 @@ namespace LigarMotorista
 
                     Motorista teste = e.Row.Item as Motorista;  //o item da coleção correspondente a linha alterada
                     var el = e.EditingElement as TextBox;       //o campo alterado
-                    string campo = "";
+                    string campo;
                     switch (bindingPath)
                     {
                         case "Intervalo":
@@ -193,22 +182,11 @@ namespace LigarMotorista
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            DateTime aux = DateTime.Today;
             copiaAtrasos = ListaDeMotoristas.ToList();
-            // string motoristas = "Ligações atrasadas: \r\n";
             foreach (Motorista item in copiaAtrasos)
             {
-                item.CalculaProxima();
-                //    if (item.Atrasado)
-                //    {
-                //        motoristas += item.NomeMotorista;
-                //        motoristas += " \r\n";
-                //    }
+                item.CalculaProxima();               
             }
-            //if (motoristas != "Ligações atrasadas: \r\n")
-            //{
-            //    MessageBox.Show(motoristas);
-            //}
         }
     }
 }

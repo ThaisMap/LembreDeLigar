@@ -15,11 +15,7 @@
              FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
              TextElement.FontSize="14"  TextElement.FontWeight="Regular"
              TextElement.Foreground="{DynamicResource MaterialDesignBody}" >
-    <UserControl.Resources>
-        <local:PercentConverter x:Key="PercentConverter" />
-    </UserControl.Resources>
-
-    <DockPanel Name="dock">
+       <DockPanel Name="dock">
         <StackPanel DockPanel.Dock="Bottom"
                     Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
             <Button x:Name="Exportar"

@@ -27,9 +27,7 @@ namespace LigarMotorista
 
         public Diarias()
         {
-            InitializeComponent();
-            
-            CarregaDados();
+            InitializeComponent();            
         }
 
         private ObservableCollection<DiariaModel> ListaDeDiarias { get; set; }
@@ -102,6 +100,12 @@ namespace LigarMotorista
                 var el = e.EditingElement as TextBox;       //o campo alterado
                 d.AlterarDiaria(teste.Id, "Obs", el.Text);  //el.text é o novo valor do campo
             }
+        }
+
+        private void TelaDiaria_Loaded(object sender, RoutedEventArgs e)
+        {
+            CarregaDados();
+
         }
     }
 }
