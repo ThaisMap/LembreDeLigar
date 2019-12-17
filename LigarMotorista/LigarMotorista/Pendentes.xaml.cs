@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data.SQLite;
 using System.Linq;
 using System.Windows;
@@ -17,7 +18,7 @@ namespace LigarMotorista
     /// </summary>
     public partial class Pendentes : UserControl
     {
-        private List<Motorista> copiaAtrasos = new List<Motorista>();
+        private List<Motorista> calculaAtrasos;
 
         private Dados d = new Dados();
         private bool isEditing = false;
@@ -29,16 +30,14 @@ namespace LigarMotorista
             InitializeComponent();
             nomePessoa = nome;
 
-            ListaDeMotoristas = new ObservableCollection<Motorista>();
-
-            CarregaDados();
+           CarregaDados();
 
             timer.Interval = TimeSpan.FromMinutes(1);
             timer.Tick += Timer_Tick;
             timer.Start();
         }
 
-        private ObservableCollection<Motorista> ListaDeMotoristas { get; set; }
+        private ICollectionView SourcePendencias { get; set; }
 
         private void Atualizar_Tick(object sender, EventArgs e)
         {
@@ -47,14 +46,9 @@ namespace LigarMotorista
 
         private void CarregaDados()
         {
-            ListaDeMotoristas = d.LeDadosEntrega<SQLiteConnection, SQLiteDataAdapter>("Select * from Entregas where Free=0");
-            if (ListaDeMotoristas.Count > 0)
-                dgLista.ItemsSource = ListaDeMotoristas;
-            else
-            {
-                dgLista.ItemsSource = null;
-            }
-        }
+            SourcePendencias = CollectionViewSource.GetDefaultView(d.LeDadosEntrega<SQLiteConnection, SQLiteDataAdapter>("Select * from Entregas where Free=0"));
+            dgLista.ItemsSource = SourcePendencias;
+          }
 
         private void DgLista_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
@@ -83,11 +77,22 @@ namespace LigarMotorista
             };
             if (salvar.ShowDialog() == true)
             {
-                if (d.ExcelEntrega(salvar.FileName, ListaDeMotoristas.ToList()))
+                if (d.ExcelEntrega(salvar.FileName, ListFromView()))
                     MessageBox.Show("Arquivo salvo com sucesso.");
                 else
                     MessageBox.Show("O arquivo não foi salvo.");
             }
+        }
+
+        private List<Motorista> ListFromView()
+        {
+            List<Motorista> ListaPendencias = new List<Motorista>();
+            foreach (Motorista item in SourcePendencias)
+            {
+                ListaPendencias.Add(item);
+            }
+
+            return ListaPendencias;
         }
 
         private void Finalizar(object sender, RoutedEventArgs e)
@@ -104,7 +109,7 @@ namespace LigarMotorista
         {
             if (MessageBox.Show("Passar todos os motoristas para lista de finalizados? ", "Confirmação", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
-                foreach (var linha in ListaDeMotoristas)
+                foreach (Motorista linha in SourcePendencias)
                 {
                     d.AlterarEntrega(linha.Id, "Free", "1");
                 }
@@ -182,11 +187,42 @@ namespace LigarMotorista
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            copiaAtrasos = ListaDeMotoristas.ToList();
-            foreach (Motorista item in copiaAtrasos)
+            calculaAtrasos = ListFromView();
+            foreach (Motorista item in calculaAtrasos)
             {
                 item.CalculaProxima();               
             }
         }
+   
+        private bool FiltrarNome(Motorista item)
+        {
+            return (item.NomeMotorista.Contains(FiltroNomes.Text));
+        }
+      
+        private bool FiltrarObservacao(Motorista item)
+        {
+            return (item.Observacao.Contains(FiltroObservacao.Text));
+        }
+
+        private void Filtrar_LostFocus(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SourcePendencias.Filter = new Predicate<object>(GetFilteredView);
+            }
+            catch (Exception)
+            { }
+        }
+ 
+        public bool GetFilteredView(object sourceObject)
+        {
+            Motorista linha = sourceObject as Motorista;
+            if (FiltrarNome(linha) && FiltrarObservacao(linha))
+            {
+                return true;
+            }
+            return false;
+        }
+    
     }
 }
