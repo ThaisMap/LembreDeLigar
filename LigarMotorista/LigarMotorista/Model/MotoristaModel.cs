@@ -26,7 +26,7 @@ namespace LigarMotorista
         public string Id { get; set; }
         public int Intervalo { get; set; }
         public string NF { get; set; }
-        [Column("Motorista")]
+        [Column("MOTORISTA")]
         public string NomeMotorista { get; set; }
         [Column("OBSERVAÇÃO")]
         public string Observacao { get; set; }

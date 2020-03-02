@@ -76,7 +76,7 @@ namespace LigarMotorista
                         var motoristas = new ExcelMapper(nomeArquivo).Fetch<Motorista>();
                         foreach (var item in motoristas)
                         {
-                            if(item.NomeMotorista != "")
+                            if(item.NomeMotorista != "" && item.NomeMotorista != null)
                                 d.InserirMotorista(item);
                         }
                    }
