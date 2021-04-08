@@ -16,7 +16,7 @@
         <TextBlock Text="Novo"            
                    HorizontalAlignment="Center"
                    VerticalAlignment="Bottom"
-                   Style="{StaticResource MaterialDesignHeadlineTextBlock}"/>
+                   Style="{StaticResource MaterialDesignHeadline4TextBlock}"/>
         <!--Textos-->
        
         <TextBox Name="NomeMotorista"
