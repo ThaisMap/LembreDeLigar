@@ -7,8 +7,8 @@ Esse sistema foi pensado para compartilhar informações entre uma equipe de Ser
 ## Ferramentas utilizadas
 - C#
 - WPF
-- [Material Design for XAML] (https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit)
-- [ExcelMapper] (https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit)
+- [Material Design for XAML](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit)
+- [ExcelMapper](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit)
 
 ## Autora
 
